@@ -17,7 +17,7 @@
              creates=/usr/local/node-v{{ nodejs_version }}-{{ nodejs_os }}-{{ nodejs_arch }}
 
 - name: Move to generic path
-  shell: mv /usr/local/node-v{{ nodejs_version }}-{{ nodejs_os }}-{{ nodejs_arch }} /usr/local/node
+  command: mv /usr/local/node-v{{ nodejs_version }}-{{ nodejs_os }}-{{ nodejs_arch }} /usr/local/node
 
 - name: Symlink Node.js into /usr/local/bin
   file: >
@@ -42,11 +42,11 @@
   delay: 2
 
 - name: Determine what version of NPM is installed
-  shell: "{{ nodejs_symlink_path }}/npm --version"
+  command: "{{ nodejs_symlink_path }}/npm --version"
   register: installed_npm_version
 
 - name: Upgrade NPM
-  shell: "/usr/local/node/bin/npm install --global --force npm@{{ nodejs_npm_version }}"
+  command: "/usr/local/node/bin/npm install --global --force npm@{{ nodejs_npm_version }}"
   when: installed_npm_version.stdout != nodejs_npm_version
   register: task_result
   until: task_result is success
